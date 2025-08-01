@@ -7,15 +7,17 @@ final class Client {
 	private String name;
 	private String email;
 	private String telNumber;
+	private String address;
 	
 	public Client() {
 	}
 
-	public Client(Integer id, String name, String email, String telNumber) {
+	public Client(Integer id, String name, String email, String telNumber, String address) {
 		this.id = id;
 		this.name = name;
 		this.email = email;
 		this.telNumber = telNumber;
+		this.address = address;
 	}
 
 	public Integer getId() {
@@ -50,9 +52,17 @@ final class Client {
 		this.telNumber = telNumber;
 	}
 
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
 	@Override
 	public String toString() {
-		return "Client [id=" + id + ", name=" + name + ", email=" + email + ", telNumber=" + telNumber + "]";
+		return "Client [id=" + id + ", name=" + name + ", email=" + email + ", telNumber=" + telNumber + ", address=" + address + "]";
 	}
 
 	@Override
