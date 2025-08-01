@@ -15,6 +15,7 @@ import db.DbException;
 import model.dao.SellerDao;
 import model.entities.Department;
 import model.entities.Seller;
+import model.exceptions.NotFoundException;
 
 public class SellerDaoJdbc implements SellerDao {
 
@@ -93,8 +94,26 @@ public class SellerDaoJdbc implements SellerDao {
 
 	@Override
 	public void deleteById(Integer id) {
-		// TODO Auto-generated method stub
-		
+		PreparedStatement st = null;
+		try {
+			st = conn.prepareStatement(
+					"DELETE FROM seller WHERE Id = ?"
+					);
+			
+			st.setInt(1, id);
+			
+			int rows = st.executeUpdate();
+			
+			if(rows == 0) {
+				throw new NotFoundException();
+			}
+		}
+		catch (SQLException e) {
+			throw new DbException(e.getMessage());
+		}
+		finally {
+			DB.closeStatement(st);
+		}
 	}
 
 	@Override
