@@ -36,6 +36,18 @@ public class Program {
 		Seller newSeller = new Seller(null, "Greg", "greg@gmail.com", new Date(), 5400.00, departmentTest);
 		sellerDao.insert(newSeller);
 		System.out.println("Inserted! new Id = " + newSeller.getId());
+		
+
+		System.out.println("## Fifth Test: Seller update");
+		seller = sellerDao.findById(1);
+		seller.setName("Felipe");
+		sellerDao.update(seller);
+		System.out.println("Updated complete");
+		
+		System.out.println("## Sixth Test: Seller delete");
+		sellerDao.deleteById(9);
+		System.out.println("Delete completed");
+		
 	}
 
 }
