@@ -305,4 +305,46 @@ public class SellerDaoJdbc implements SellerDao {
 			DB.closeResultSet(rs);
 		}
 	}
+	
+	public List<Seller> findBySalaryRange(Double minValSalary, Double maxValSalary){
+		
+		PreparedStatement st = null;
+		ResultSet rs = null;
+		try {
+			st = conn.prepareStatement(
+					"SELECT seller.*,department.Name as DepName "
+					+"FROM seller INNER JOIN department "
+					+"ON seller.DepartmentId = department.Id "
+					+"WHERE baseSalary >= ? AND baseSalary < ? "
+					+"ORDER by name"
+					);
+			
+			st.setDouble(1, minValSalary);
+			st.setDouble(2, maxValSalary);
+			rs = st.executeQuery();
+			List<Seller> resultsListBySalary = new ArrayList<>();
+			Map<Integer, Department> mapDepartment = new HashMap<>();
+			
+			while(rs.next()) {
+				
+				Department dep = mapDepartment.get(rs.getInt("DepartmentId"));
+				
+				if(dep==null) {
+					dep = instantiateDepartment(rs);
+					mapDepartment.put(rs.getInt("DepartmentId"), dep);
+				}
+				
+				Seller seller = instantiateSeller(rs, dep);
+				resultsListBySalary.add(seller);				
+			}
+			return resultsListBySalary;
+		}
+		catch(SQLException e) {
+			throw new DbException(e.getMessage());
+		}
+		finally {
+			DB.closeStatement(st);
+			DB.closeResultSet(rs);
+		}
+	}
 }
