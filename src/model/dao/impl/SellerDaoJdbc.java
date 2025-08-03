@@ -28,7 +28,20 @@ public class SellerDaoJdbc implements SellerDao {
 	@Override
 	public void insert(Seller seller) {
 		PreparedStatement st = null;
+		ResultSet rs = null;
+		
 		try {
+			st = conn.prepareStatement(
+					"SELECT * FROM seller WHERE Email = ?"					
+					);
+			
+			st.setString(1, seller.getEmail());
+			rs = st.executeQuery();
+			
+			if(rs.next()) {
+				throw new DbException("Email has already registered!");
+			}
+			
 			st = conn.prepareStatement(
 				"INSERT INTO seller "
 				+"(Name, Email, BirthDate, BaseSalary, DepartmentId) "
@@ -45,7 +58,7 @@ public class SellerDaoJdbc implements SellerDao {
 			int rowsAffected = st.executeUpdate();
 			
 			if(rowsAffected > 0) {
-				ResultSet rs = st.getGeneratedKeys();
+				//ResultSet rs = st.getGeneratedKeys();
 				if(rs.next()) {
 					int id = rs.getInt(1);
 					seller.setId(id);
