@@ -35,7 +35,7 @@ public class Program {
 		}
 		
 		System.out.println("## Test: Seller insert");
-		Seller newSeller = new Seller(null, "Yago", "yago@gmail.com", new Date(), 5400.00, departmentTest);
+		Seller newSeller = new Seller(null, "Joshua", "joshua@gmail.com", new Date(), 3800.00, departmentTest);
 		sellerDao.insert(newSeller);
 		System.out.println("Inserted! new Id = " + newSeller.getId());
 		
@@ -47,8 +47,14 @@ public class Program {
 		System.out.println("Updated complete");
 		
 		System.out.println("## Test: Seller find by Min Salary Value");
-		List<Seller> listSellerBySalary = sellerDao.findBySalaryMinimum(5500.00);
+		List<Seller> listSellerBySalary = sellerDao.findBySalaryMinimum(5000.00);
 		for(Seller s1 : listSellerBySalary) {
+			System.out.println(s1);
+		}
+		
+		System.out.println("## Test: Seller find by Salary Range");
+		List<Seller> listSellerBySalaryRange = sellerDao.findBySalaryRange(3500.00, 4200.00);
+		for(Seller s1 : listSellerBySalaryRange) {
 			System.out.println(s1);
 		}
 		
