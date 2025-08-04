@@ -11,6 +11,7 @@ import db.DB;
 import db.DbException;
 import model.dao.DepartmentDao;
 import model.entities.Department;
+import model.exceptions.NotFoundException;
 
 public class DepartmentDaoJdbc implements DepartmentDao {
 
@@ -59,14 +60,49 @@ public class DepartmentDaoJdbc implements DepartmentDao {
 
 	@Override
 	public void update(Department obj) {
-		// TODO Auto-generated method stub
-		
+		PreparedStatement st = null;
+		try {
+			st = conn.prepareStatement(
+					"UPDATE department "
+					+ "SET (name = ?) "
+					+ "WHERE id = ?"
+					);
+			st.setString(1, obj.getName());
+			st.setInt(1, obj.getId());
+			
+			st.executeUpdate();
+		}
+		catch(SQLException e)
+		{
+			throw new DbException(e.getMessage());
+		}
+		finally {
+			DB.closeStatement(st);
+		}
 	}
 
 	@Override
 	public void deleteById(Integer id) {
-		// TODO Auto-generated method stub
-		
+		PreparedStatement st = null;
+		try {
+			st = conn.prepareStatement(
+					"DELETE FROM department WHERE Id = ?"
+					);
+			
+			st.setInt(1, id);
+			
+			int rows = st.executeUpdate();
+			
+			if(rows == 0) {
+				throw new NotFoundException();
+			}
+		}
+		catch (SQLException e) {
+			throw new DbException(e.getMessage());
+		}
+		finally {
+			DB.closeStatement(st);
+		}
 	}
 
 	@Override
