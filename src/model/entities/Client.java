@@ -1,7 +1,10 @@
 package model.entities;
 
-final class Client {
+import java.io.Serializable;
+
+final class Client implements Serializable{
 	
+	private static final long serialVersionUID = 1L;
 	
 	private Integer id;
 	private String name;
