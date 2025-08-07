@@ -1,6 +1,7 @@
 package model.entities;
 
 import java.io.Serializable;
+import java.util.Date;
 
 public class Client implements Serializable{
 	
@@ -11,16 +12,18 @@ public class Client implements Serializable{
 	private String email;
 	private String telNumber;
 	private String address;
+	private Date birthDate;
 	
 	public Client() {
 	}
 
-	public Client(Integer id, String name, String email, String telNumber, String address) {
+	public Client(Integer id, String name, String email, String telNumber, String address, Date birthDate) {
 		this.id = id;
 		this.name = name;
 		this.email = email;
 		this.telNumber = telNumber;
 		this.address = address;
+		this.birthDate = birthDate;
 	}
 
 	public Integer getId() {
@@ -62,10 +65,18 @@ public class Client implements Serializable{
 	public void setAddress(String address) {
 		this.address = address;
 	}
+	
+	public Date getBirthDate() {
+		return birthDate;
+	}
+	
+	public void setBirthDate(Date birthDate) {
+		this.birthDate = birthDate;
+	}
 
 	@Override
 	public String toString() {
-		return "Client [id=" + id + ", name=" + name + ", email=" + email + ", telNumber=" + telNumber + ", address=" + address + "]";
+		return "Client [id=" + id + ", name=" + name + ", email=" + email + ", telNumber=" + telNumber + ", address=" + address + ", Birth Date" + birthDate + "]";
 	}
 
 	@Override
