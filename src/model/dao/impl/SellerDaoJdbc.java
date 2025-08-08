@@ -252,7 +252,6 @@ public class SellerDaoJdbc implements SellerDao {
 				
 				Seller seller = instantiateSeller(rs, dep);
 				resultsList.add(seller);
-				
 			}
 			return resultsList;
 		}
