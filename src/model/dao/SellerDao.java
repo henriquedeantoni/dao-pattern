@@ -15,5 +15,6 @@ public interface SellerDao {
 	List<Seller> findByDepartment(Department department);
 	List<Seller> findBySalaryMinimum(Double minValSalary);
 	List<Seller> findBySalaryRange(Double minValSalary, Double maxValSalary);
+	List<Seller> findByMonth(int month);
 }
 

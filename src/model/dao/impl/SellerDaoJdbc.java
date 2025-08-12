@@ -346,4 +346,10 @@ public class SellerDaoJdbc implements SellerDao {
 			DB.closeResultSet(rs);
 		}
 	}
+
+	@Override
+	public List<Seller> findByMonth(int month) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
