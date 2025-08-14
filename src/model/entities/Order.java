@@ -1,13 +1,17 @@
 package model.entities;
 
 import model.entities.enums.OrderStatus;
+import model.entities.enums.PaymentMethod;
 
 public class Order {
 	
-	private int id;
-	private int totalHours;
+	private Integer id;
+	private Integer totalHoursService;
+	private String title;
+	private String description;
 	private double totalPrice;
 	private OrderStatus orderStatus;
+	private PaymentMethod paymentMethod;
 	
 	private Seller seller;
 	private Client client;
@@ -15,30 +19,51 @@ public class Order {
 	public Order() {
 	}
 
-	public Order(int id, int totalHours, double totalPrice, OrderStatus orderStatus, Seller seller, Client client) {
+
+	public Order(Integer id, Integer totalHoursService, String title, String description, double totalPrice,
+			OrderStatus orderStatus, PaymentMethod paymentMethod, Seller seller, Client client) {
 		super();
 		this.id = id;
-		this.totalHours = totalHours;
+		this.totalHoursService = totalHoursService;
+		this.title = title;
+		this.description = description;
 		this.totalPrice = totalPrice;
 		this.orderStatus = orderStatus;
+		this.paymentMethod = paymentMethod;
 		this.seller = seller;
 		this.client = client;
 	}
 
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
-	public int getTotalHours() {
-		return totalHours;
+	public Integer getTotalHoursService() {
+		return totalHoursService;
 	}
 
-	public void setTotalHours(int totalHours) {
-		this.totalHours = totalHours;
+	public void setTotalHoursService(Integer totalHoursService) {
+		this.totalHoursService = totalHoursService;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	public double getTotalPrice() {
@@ -64,13 +89,22 @@ public class Order {
 	public void setSeller(Seller seller) {
 		this.seller = seller;
 	}
-	
+
 	public Client getClient() {
 		return client;
 	}
 
 	public void setClient(Client client) {
 		this.client = client;
+	}
+	
+	public PaymentMethod getPaymentMethod() {
+		return paymentMethod;
+	}
+
+
+	public void setPaymentMethod(PaymentMethod paymentMethod) {
+		this.paymentMethod = paymentMethod;
 	}
 
 	@Override
