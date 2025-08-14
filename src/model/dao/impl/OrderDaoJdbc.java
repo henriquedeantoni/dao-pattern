@@ -66,7 +66,13 @@ public class OrderDaoJdbc implements OrderDao {
 	}
 
 	@Override
-	public List<Order> filterByDate(Date date) {
+	public List<Order> filterByMonth(Date date) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Order> filterByYear(Date date) {
 		// TODO Auto-generated method stub
 		return null;
 	}
