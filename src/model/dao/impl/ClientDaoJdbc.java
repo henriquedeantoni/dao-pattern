@@ -11,6 +11,7 @@ import db.DB;
 import db.DbException;
 import model.dao.ClientDao;
 import model.entities.Client;
+import model.exceptions.NotFoundException;
 
 public class ClientDaoJdbc implements ClientDao {
 	private Connection conn;
@@ -60,19 +61,67 @@ public class ClientDaoJdbc implements ClientDao {
 	
 	@Override
 	public void update(Client client) {
-		// TODO Auto-generated method stub
+		PreparedStatement st = null;
+		try {
+			st = conn.prepareStatement(
+					"UPDATE client"
+					+ " SET (Name = ?, Email = ?, TelNumber = ?, Address = ?, BirthDate = ?)"
+					+ " WHERE id = ?");
+			st.setString(1, client.getName());
+			st.setString(2, client.getEmail());
+			st.setString(3, client.getTelNumber());
+			st.setString(4, client.getAddress());
+			st.setInt(5, client.getId());
+			
+			st.executeUpdate();
+		} catch (SQLException e) {
+			throw new DbException(e.getMessage());
+		}
+		finally {
+			DB.closeStatement(st);
+		}
 		
 	}
 
 	@Override
 	public void deleteById(Integer id) {
-		// TODO Auto-generated method stub
-		
+		PreparedStatement st = null;
+		try {
+			st = conn.prepareStatement("DELETE FROM client WHERE Id = ?");
+			st.setInt(1, id);
+			int rows = st.executeUpdate();
+			
+			if(rows == 0) {
+				throw new NotFoundException();
+			}
+		} catch(SQLException e) {
+			throw new DbException(e.getMessage());
+		} finally {
+			DB.closeStatement(st);
+		}
 	}
 
 	@Override
 	public Client findById(Integer id) {
-		// TODO Auto-generated method stub
+		PreparedStatement st = null;
+		ResultSet rs = null;
+		try {
+			st = conn.prepareStatement("SELECT FROM client WHERE Id = ?");
+			st.setInt(1, id);
+			rs = st.executeQuery();
+			
+			if(rs.next()) {
+				Client client = new Client();
+				client.setId(rs.getInt("ClientId"));
+				client.setAddress(rs.getString("Address"));
+				client.setName(rs.getString("Name"));
+				client.setEmail(rs.getString("Email"));
+			}
+		} catch(SQLException e) {
+			throw new DbException(e.getMessage());
+		} finally {
+			DB.closeStatement(st);
+		}
 		return null;
 	}
 
