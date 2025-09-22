@@ -5,12 +5,17 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import db.DB;
 import db.DbException;
 import model.dao.ClientDao;
 import model.entities.Client;
+import model.entities.Department;
+import model.entities.Seller;
 import model.exceptions.NotFoundException;
 
 public class ClientDaoJdbc implements ClientDao {
@@ -71,7 +76,8 @@ public class ClientDaoJdbc implements ClientDao {
 			st.setString(2, client.getEmail());
 			st.setString(3, client.getTelNumber());
 			st.setString(4, client.getAddress());
-			st.setInt(5, client.getId());
+			st.setDate(5, new java.sql.Date(client.getBirthDate().getTime()));
+			st.setInt(6, client.getId());
 			
 			st.executeUpdate();
 		} catch (SQLException e) {
@@ -106,29 +112,62 @@ public class ClientDaoJdbc implements ClientDao {
 		PreparedStatement st = null;
 		ResultSet rs = null;
 		try {
-			st = conn.prepareStatement("SELECT FROM client WHERE Id = ?");
+			st = conn.prepareStatement("SELECT * FROM client WHERE Id = ?");
 			st.setInt(1, id);
 			rs = st.executeQuery();
 			
 			if(rs.next()) {
-				Client client = new Client();
-				client.setId(rs.getInt("ClientId"));
-				client.setAddress(rs.getString("Address"));
-				client.setName(rs.getString("Name"));
-				client.setEmail(rs.getString("Email"));
+				Client client = instantiateClient(rs);
+				return client;
 			}
 		} catch(SQLException e) {
 			throw new DbException(e.getMessage());
 		} finally {
 			DB.closeStatement(st);
+			DB.closeResultSet(rs);
 		}
 		return null;
+	}
+	
+	private Client instantiateClient(ResultSet rs) throws SQLException {
+		Client client = new Client();
+		client.setId(rs.getInt("ClientId"));
+		client.setAddress(rs.getString("Address"));
+		client.setName(rs.getString("Name"));
+		client.setBirthDate(rs.getDate("BirthDate"));
+		client.setEmail(rs.getString("Email"));
+		
+		return client;
 	}
 
 	@Override
 	public List<Client> findAll() {
-		// TODO Auto-generated method stub
-		return null;
+		PreparedStatement st = null;
+		ResultSet rs = null;
+		try {
+			st = conn.prepareStatement(
+					"SELECT * FROM client "
+					+"ORDER BY Name"
+					);
+
+			rs = st.executeQuery();
+			
+			List<Client> resultsList = new ArrayList<>();
+			
+			while(rs.next()) {
+				
+				Client client = instantiateClient(rs);
+				resultsList.add(client);
+			}
+			return resultsList;
+		}
+		catch(SQLException e) {
+			throw new DbException(e.getMessage());
+		}
+		finally {
+			DB.closeStatement(st);
+			DB.closeResultSet(rs);
+		}
 	}
 
 	@Override
