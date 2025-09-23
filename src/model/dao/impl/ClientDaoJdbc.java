@@ -149,7 +149,6 @@ public class ClientDaoJdbc implements ClientDao {
 					"SELECT * FROM client "
 					+"ORDER BY Name"
 					);
-
 			rs = st.executeQuery();
 			
 			List<Client> resultsList = new ArrayList<>();
@@ -171,8 +170,32 @@ public class ClientDaoJdbc implements ClientDao {
 	}
 
 	@Override
-	public List<Client> findByInitial() {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Client> findByNameSegment(String segment) {
+		PreparedStatement st = null;
+		ResultSet rs = null;
+		try {
+			st = conn.prepareStatement(
+					"SELECT * FROM client "
+					+"WHERE Name Like ('%', ?, '%')"
+					);
+			
+			st.setString(1, segment);
+			
+			rs = st.executeQuery();
+			List<Client> resultsList = new ArrayList<>();
+			
+			while(rs.next()) {
+				
+				Client client = instantiateClient(rs);
+				resultsList.add(client);
+			}
+			return resultsList;
+		} catch(SQLException e) {
+			throw new DbException(e.getMessage());
+		}
+		finally {
+			DB.closeStatement(st);
+			DB.closeResultSet(rs);
+		}
 	}
 }

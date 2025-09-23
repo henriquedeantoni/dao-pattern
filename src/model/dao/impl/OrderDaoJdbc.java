@@ -15,6 +15,7 @@ import model.entities.Client;
 import model.entities.Order;
 import model.entities.Seller;
 import model.entities.enums.OrderStatus;
+import model.exceptions.NotFoundException;
 
 public class OrderDaoJdbc implements OrderDao {
 
@@ -32,7 +33,7 @@ public class OrderDaoJdbc implements OrderDao {
 			
 			st = conn.prepareStatement(
 					"INSERT INTO Department "
-					+"(TotalHoursService, Title, Description, TotalPrice, OrderStatus, PaymentMethod, SellerId, ClientId) "
+					+"(TotalHoursService, Title, Description, TotalPrice, OrderStatus, PaymentMethod, SellerId, ClientId ) "
 					+"VALUES "
 					+"(?, ?, ?, ?, ?)",
 					Statement.RETURN_GENERATED_KEYS
@@ -71,14 +72,47 @@ public class OrderDaoJdbc implements OrderDao {
 
 	@Override
 	public void update(Order obj) {
-		// TODO Auto-generated method stub
-		
+		PreparedStatement st = null;
+		try {
+			st = conn.prepareStatement(
+					"UPDATE client"
+					+ " SET (TotalHoursService = ?, Title = ?, Description = ?, TotalPrice = ?, OrderStatus = ?, PaymentMethod = ?, SellerId = ?, ClientId = ? )"
+					+ " WHERE id = ?");
+			st.setInt(1, obj.getTotalHoursService());
+			st.setString(2, obj.getTitle());
+			st.setString(3, obj.getDescription());
+			st.setDouble(4, obj.getTotalPrice());
+			st.setInt(5, obj.getOrderStatus().getCode());
+			st.setInt(6, obj.getPaymentMethod().getCode());
+			st.setInt(7, obj.getSeller().getId());
+			st.setInt(8, obj.getClient().getId());
+			st.setInt(9, obj.getId());
+			
+			st.executeUpdate();
+		} catch (SQLException e) {
+			throw new DbException(e.getMessage());
+		}
+		finally {
+			DB.closeStatement(st);
+		}
 	}
 
 	@Override
-	public void delete(Order obj) {
-		// TODO Auto-generated method stub
-		
+	public void delete(Integer id) {
+		PreparedStatement st = null;
+		try {
+			st = conn.prepareStatement("DELETE FROM order WHERE Id = ?");
+			st.setInt(1, id);
+			int rows = st.executeUpdate();
+			
+			if(rows == 0) {
+				throw new NotFoundException();
+			}
+		} catch(SQLException e) {
+			throw new DbException(e.getMessage());
+		} finally {
+			DB.closeStatement(st);
+		}
 	}
 
 	@Override
