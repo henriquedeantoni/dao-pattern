@@ -11,7 +11,7 @@ import model.entities.enums.OrderStatus;
 public interface OrderDao {
 	void insert(Order obj);
 	void update(Order obj);
-	void delete(Order obj);
+	void delete(Integer id);
 	Order findById(Integer id);
 	List<Order> findByMinimumValue(Double minValue);
 	List<Order> findByOrderStatus(OrderStatus orderStatus);

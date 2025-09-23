@@ -11,6 +11,6 @@ public interface ClientDao {
 	void deleteById(Integer id);
 	Client findById(Integer id);
 	List<Client> findAll();
-	List<Client> findByInitial();
+	List<Client> findByNameSegment(String segment);
 	
 }
